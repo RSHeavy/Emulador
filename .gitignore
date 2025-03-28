@@ -1,2 +1,7 @@
 obj/
 **.csproj
+**.sln
+**.cpp
+**.asm
+**.log
+**.txt
