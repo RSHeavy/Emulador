@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Formats.Asn1;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +11,9 @@ using System.Threading.Tasks;
 /*
     1) Excepción de el Read()
     2) La segunda asignacion del For debe ejecutarse despues del bloque de intrucciones o instriccion
+    3) Programar FuncionMagtematica método
+    4) Programar el For
+    5) Programar el While
 */
 
 namespace Semantica {
@@ -326,19 +331,32 @@ namespace Semantica {
                 //bloqueInstrucciones | intruccion 
                 //while(Condicion);
         private void Do(bool ejecuta) {
-            match("do");
+            int charTmp = numeroChar - 3;
+            int lineTmp = linea;
+            bool ejecutaDo;
 
-            if (Contenido == "{") {
-                BloqueInstrucciones(ejecuta);
-            } else {
-                Instruccion(ejecuta);
-            }
+            do {
+                match("do");
+                if (Contenido == "{") {
+                    BloqueInstrucciones(ejecuta);
+                } else {
+                    Instruccion(ejecuta);
+                }
 
-            match("while");
-            match("(");
-            bool ejecutaDo = Condicion() && ejecuta;
-            match(")");
-            match(";");
+                match("while");
+                match("(");
+                ejecutaDo = Condicion() && ejecuta;
+                match(")");
+                match(";");
+                
+                if (ejecutaDo) {
+                    archivo.DiscardBufferedData();
+                    archivo.BaseStream.Seek(charTmp, SeekOrigin.Begin);
+                    numeroChar = charTmp;
+                    linea = lineTmp;
+                    nexToken();
+                }
+            } while(ejecutaDo);
         }
         
         //For -> for(Asignacion; Condicion; Asignacion) 
@@ -500,6 +518,18 @@ namespace Semantica {
                 s.Push(v.getValor());
                 //Console.Write(Contenido + " ");
                 match(Tipos.Identificador);
+            } else  if (Clasificacion == Tipos.FuncionMatematica) {
+                    string nombreFuncion = Contenido;
+
+                    match(Tipos.FuncionMatematica);
+                    match("(");
+                    Expresion();
+                    match(")");
+
+                    float resultado = s.Pop();
+
+                    float resultadoMatematico = FuncionMatematica(resultado, nombreFuncion);
+                    s.Push(resultadoMatematico);
             } else {
                 match("(");
 
@@ -517,7 +547,9 @@ namespace Semantica {
                     match("(");
                     huboCasteo = true;
                 }
+
                 Expresion();
+
                 if (huboCasteo) {
                     float resultado;
                     maximoTipo = tipoCasteo;
@@ -570,6 +602,15 @@ namespace Semantica {
                     }
                 }
             }
+        }
+
+        private float FuncionMatematica(float valor, String nombre) {
+            float resultado = valor;
+            switch (nombre) {
+                case "abs": resultado = Math.Abs(valor); break;
+                case "pow": resultado = (float) Math.Pow(valor, 2); break;
+            }
+            return resultado;
         }
     }
 }

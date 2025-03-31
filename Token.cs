@@ -44,22 +44,5 @@ namespace Semantica {
             get => contenido;
             set => contenido = value;
         }
-    /*
-        public void setContenido(String contenido) {
-            this.contenido = contenido;
-        }
-
-        public void setClasificacion(Tipos clasificacion) {
-            this.clasificacion = clasificacion;
-        }
-
-        public String getContenido() {
-            return this.contenido;
-        }
-
-        public Tipos getClasificacion() {
-            return this.clasificacion;
-        }
-        */
     }
 }

@@ -15,6 +15,7 @@ namespace Semantica {
         protected StreamReader archivo;
         protected StreamWriter log;
         protected StreamWriter asm;
+        protected int numeroChar;
 
         int[,] TRAND = {
             {  0,  1,  2, 33,  1, 12, 14,  8,  9, 10, 11, 23, 16, 16, 18, 20, 21, 26, 25, 27, 29, 32, 34,  0,  F, 33  },
@@ -57,8 +58,9 @@ namespace Semantica {
             { 36, 36, 36, 36, 36, 36, 35, 36, 36, 36, 36, 36, 37, 36, 36, 36, 36, 36, 36, 36, 36, 36,  0, 36, 36, 36  }
         };
         public Lexico(string nombreArchivo = "Prueba.cpp"){
-
-            log = new StreamWriter(Path.ChangeExtension(nombreArchivo, ".cpp"));
+            numeroChar = 1;
+            
+            log = new StreamWriter(Path.ChangeExtension(nombreArchivo, ".log"));
             log.AutoFlush = true;
 
             if (File.Exists(nombreArchivo)) {
@@ -214,6 +216,7 @@ namespace Semantica {
 
                 if (estado >= 0) {
                     archivo.Read();
+                    numeroChar ++;
                     col++;
                     if (c == '\n') {
                         linea++;
@@ -257,6 +260,7 @@ namespace Semantica {
                     case "for":
                         Clasificacion =(Tipos.PalabraReservada);
                         break;
+                    case "abs":
                     case "ceil":
                     case "pow":
                     case "sqrt":
@@ -264,14 +268,12 @@ namespace Semantica {
                     case "equal":
                     case "floor":
                     case "max":
-                    case "abs":
                     case "min":
                     case "log10":
                     case "log2":
                     case "rand":
                     case "trunc":
                     case "round":
-                    case "":
                         Clasificacion = Tipos.FuncionMatematica;
                         break;
                 }
