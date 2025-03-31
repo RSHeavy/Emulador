@@ -257,7 +257,23 @@ namespace Semantica {
                     case "for":
                         Clasificacion =(Tipos.PalabraReservada);
                         break;
-                    case 
+                    case "ceil":
+                    case "pow":
+                    case "sqrt":
+                    case "exp":
+                    case "equal":
+                    case "floor":
+                    case "max":
+                    case "abs":
+                    case "min":
+                    case "log10":
+                    case "log2":
+                    case "rand":
+                    case "trunc":
+                    case "round":
+                    case "":
+                        Clasificacion = Tipos.FuncionMatematica;
+                        break;
                 }
             }    
             if (!finArchivo()) {
