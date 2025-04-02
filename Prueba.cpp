@@ -5,6 +5,48 @@ using System.Threading.Tasks;
 
 static void Main(string[] args)
 {
+    int a = Console.Read();
+    /*
+    AGREGADO PARA PROBAR RANDOM
+    int random;
+    int i;
+    int j;
+
+    for(i = 0; i < 20; i++) {
+        random = rand(50);
+        j = i + 1;
+        Console.WriteLine(j + " Random = " + random);
+    }
+    */
+
+    /*
+    AGREGADO PARA PROBAR CICLOS
+    int n;
+    int i;
+    int spaces;
+    int asteristics;
+
+    Console.Write("Height of the triangle = ");
+    n = Console.Read();
+
+    Console.WriteLine();
+
+    for (i = 0; i < n; i++)
+    {
+        for (spaces = 0; spaces < i; spaces++)
+        {
+            Console.Write(" ");
+        }
+
+        for (asteristics = 0; asteristics < n - i; asteristics++)
+        {
+            Console.Write("* ");
+        }
+
+        Console.WriteLine();
+    }
+    */
+   /*
     char n;
     int p;
 
@@ -12,65 +54,24 @@ static void Main(string[] args)
     float x = 0, y = 10, z = 2;
     float c;
 
-    // Error, no se puede asignar un Int a un Char
-    // c = (100+200)
     c = (char)(100 + 200); // 44
 
     Console.Write("Valor de altura = ");
     altura = Console.ReadLine();
 
-    x += sqrt(abs(0 - altura)); // 100
-    Console.WriteLine("x = " + x);
-
-    // Console.WriteLine("Valor de altura = " + altura);
-
-    // Error, no se puede asignar un Int a un Char
-    // x = ((3 + altura) * 8 - (10 - 4) / 2); // = 61
-
-    x = (char)(((3 + altura) * 8 - (10 - 4) / 2)); // Para altura = 5, x = 61
+    // Si altura = 5, entonces
+    x = (char)(((3 + altura) * 8 - (10 - 4) / 2)); // 61
     x--;                                           // 60
-    x += sqrt(abs(0 - altura));                    // 100
-    // Console.WriteLine("x = " + x);
-    x *= 2;       // 200
-    x /= (y - 6); // 50
-    x = x + 5;    // 55
+    x += 40;                                       // 100
+    x *= 2;                                        // 200
+    x /= (y - 6);                                  // 50
+    x = x + 5;                                     // 55
 
-    x = 0;
-
-    do
+    for (i = 1; i <= altura; i++)
     {
-        y = 0;
-        do
+        for (j = 1; j <= i; j++)
         {
-            if (y % 2 == 0)
-            {
-                Console.Write("*");
-            }
-            else
-            {
-                Console.Write("-");
-            }
-            y++;
-        } while (y <= x);
-        Console.WriteLine();
-        x++;
-    } while (x < altura);
-
-    /*do {
-        y = 0;
-        do {
-            //Console.Write("*");
-            y++;
-        }while(y <= x);
-        Console.WriteLine();
-        x++;
-    } while(x < altura);*/
-
-    /*for (i = 1; i<=altura; i++)
-    {
-        for (j = 1; j<=i; j++)
-        {
-            if (j%2==0)
+            if (j % 2 == 0)
                 Console.Write("*");
             else
                 Console.Write("-");
@@ -84,25 +85,29 @@ static void Main(string[] args)
     {
         Console.Write("-");
         i++;
-    }
-    while (i<altura*2);
+    } while (i < altura * 2);
+
     Console.WriteLine("");
-    for (i = 1; i<=altura; i++)
+
+    for (i = 1; i <= altura; i++)
     {
         j = 1;
-        while (j<=i)
+        while (j <= i)
         {
-            Console.Write(""+j);
+            Console.Write("" + j);
             j++;
         }
         Console.WriteLine("");
     }
+
     i = 0;
+
     do
     {
         Console.Write("-");
         i++;
-    }
-    while (i<altura*2);
-    Console.WriteLine("");*/
+    } while (i < altura * 2);
+
+    Console.WriteLine("");
+    */
 }
