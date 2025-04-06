@@ -243,7 +243,7 @@ namespace Semantica
 
         //Asignacion -> id = Expresion | id++ | id-- | id  IncTermino expresion |                                           
         //id IncrementoFactor Expresion | id = console.Read() | id = console.ReadLine()
-        private void Asignacion()
+        private void Asignacion(bool Vuel1For = false)
         {
             //Cada vez que haya una asignacion para reiniciar el maximo tipo
             maximoTipo = Variable.TipoDato.Char;
@@ -332,8 +332,10 @@ namespace Semantica
                         break;
                 }
             }
-            //Console.WriteLine("Maximo tipo: " + maximoTipo);
-            v.setValor(nuevoValor, maximoTipo, linea, col);
+            if (!Vuel1For)
+            {
+                v.setValor(nuevoValor, maximoTipo, linea, col);
+            }
             //DysplayStack();
         }
 
@@ -492,8 +494,6 @@ namespace Semantica
         //BloqueInstrucciones | Intruccion
         private void For(bool ejecuta)
         {
-            int charTmp = numeroChar - 3;
-            int lineTmp = linea;
             bool ejecutaFor;
 
             match("for");
@@ -506,14 +506,15 @@ namespace Semantica
 
             int incremento = numeroChar;
             match(";");
-            Asignacion();
+            Asignacion(true);
             match(")");
 
+            int lineTmp = linea;
             int inicioFor = numeroChar;
 
+            int vuelta = 1;
             while (ejecutaFor)
             {
-
                 if (Contenido == "{")
                 {
                     BloqueInstrucciones(ejecutaFor);
@@ -523,33 +524,31 @@ namespace Semantica
                     Instruccion(ejecutaFor);
                 }
 
-                Console.WriteLine(Contenido);
                 Regresar(incremento);
                 nexToken();
                 Asignacion();
 
-                //Console.WriteLine(Contenido);
                 Regresar(condicionFor);
                 nexToken();
                 ejecutaFor = ejecutaFor = Condicion() && ejecuta;
 
+                Regresar(inicioFor);
                 numeroChar = inicioFor;
                 linea = lineTmp;
 
                 nexToken();
+                vuelta++;
             }
 
-            if (!ejecutaFor)
+            if (Contenido == "{")
             {
-                if (Contenido == "{")
-                {
-                    BloqueInstrucciones(ejecutaFor);
-                }
-                else
-                {
-                    Instruccion(ejecutaFor);
-                }
+                BloqueInstrucciones(false);
             }
+            else
+            {
+                Instruccion(false);
+            }
+
         }
 
         //console -> console.(WriteLine|Write) (cadena concatenaciones?);
