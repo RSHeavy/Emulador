@@ -9,9 +9,9 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Threading.Tasks;
 
 /*
-    1) Excepción en el Console.Read(). (LISTO)
+    1) Excepción en el Console.Read(). 
     2) Programar MathFunction método. (LISTO)
-    3) Programar el for. La segunda asignación del for (incremento) 
+    3) Programar el for. La segunda asignación del for (incremento) (LISTO)
        debe de ejecutarse después del bloque de instrucciones o instrucción.
     4) Programar el while. (LISTO)
 
@@ -135,8 +135,8 @@ namespace Semantica
                     if (Contenido == "Read")
                     {
                         match("Read");
-                        int r = Console.Read();
-                        if (!(r >= 48 && r <= 57))
+                        int r = Console.Read() - 48;
+                        if (!(r >= 0 && r <= 9))
                         {
                             throw new Error("Sintaxis. No se ingresó un número ", linea, col);
                         }
@@ -267,18 +267,17 @@ namespace Semantica
                     if (Contenido == "Read")
                     {
                         match("Read");
-                        int r = Console.Read();
-                        v.setValor(r, maximoTipo, linea, col); // Asignamos el último valor leído a la última variable detectada
+                        nuevoValor = Console.Read() - 48;
+                        if (!(nuevoValor >= 0 && nuevoValor <= 9))
+                        {
+                            throw new Error("Sintaxis. No se ingresó un número ", linea, col);
+                        }
                     }
                     else
                     {
                         match("ReadLine");
                         string? r = Console.ReadLine();
-                        if (float.TryParse(r, out float valor))
-                        {
-                            v.setValor(valor, maximoTipo, linea, col);
-                        }
-                        else
+                        if (!(float.TryParse(r, out nuevoValor)))
                         {
                             throw new Error("Semántico. No se ingresó un número ", linea, col);
                         }
@@ -494,6 +493,7 @@ namespace Semantica
         //BloqueInstrucciones | Intruccion
         private void For(bool ejecuta)
         {
+            int lineTmp = linea;
             bool ejecutaFor;
 
             match("for");
@@ -507,12 +507,9 @@ namespace Semantica
             int incremento = numeroChar;
             match(";");
             Asignacion(true);
+            int inicioFor = numeroChar;
             match(")");
 
-            int lineTmp = linea;
-            int inicioFor = numeroChar;
-
-            int vuelta = 1;
             while (ejecutaFor)
             {
                 if (Contenido == "{")
@@ -524,20 +521,23 @@ namespace Semantica
                     Instruccion(ejecutaFor);
                 }
 
+
                 Regresar(incremento);
+                numeroChar = incremento;
+                linea = lineTmp;
                 nexToken();
                 Asignacion();
 
                 Regresar(condicionFor);
+                numeroChar = condicionFor;
+                linea = lineTmp;
                 nexToken();
-                ejecutaFor = ejecutaFor = Condicion() && ejecuta;
+                ejecutaFor = Condicion() && ejecuta;
 
                 Regresar(inicioFor);
                 numeroChar = inicioFor;
                 linea = lineTmp;
-
                 nexToken();
-                vuelta++;
             }
 
             if (Contenido == "{")
@@ -549,6 +549,11 @@ namespace Semantica
                 Instruccion(false);
             }
 
+        }
+        private void Regresar(int posicion)
+        {
+            archivo.DiscardBufferedData();
+            archivo.BaseStream.Seek(posicion, SeekOrigin.Begin);
         }
 
         //console -> console.(WriteLine|Write) (cadena concatenaciones?);
@@ -868,12 +873,6 @@ namespace Semantica
 
             }
             return resultado;
-        }
-
-        private void Regresar(int posicion)
-        {
-            archivo.DiscardBufferedData();
-            archivo.BaseStream.Seek(posicion, SeekOrigin.Begin);
         }
     }
 }
